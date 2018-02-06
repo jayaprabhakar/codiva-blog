@@ -1,0 +1,11 @@
+
+<ul id="tags" class="tags">
+  {{ if ( isset .Params "tags") }}
+  	{{ if gt (len .Params.tags) 0 }}
+	Tags: 
+	{{ end }}
+  {{ end }}
+  {{ range .Params.tags }}
+    <li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a> </li>
+  {{ end }}
+</ul>

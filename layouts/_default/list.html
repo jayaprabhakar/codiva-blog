@@ -1,0 +1,33 @@
+{{ define "main" }}
+  <div class="main">
+
+    {{.Content}}
+
+    {{ range (.Paginate (where .Data.Pages "Type" "post") ).Pages }}     
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+   
+        {{ .Summary }}
+        <a href="{{ .Permalink }}">Read More...</a>
+
+        {{ partial "tags" . }}
+
+        <hr>
+
+    {{ end }}
+
+    {{ template "_internal/pagination.html" . }}
+<!--
+    <h1>pages</h1>
+    {{ range .Data.Pages }}
+      {{ if eq .Type "page" }}
+        <div>
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        {{ .Summary }}
+        <hr>
+        </div>
+      {{ end }}
+    {{ end }}
+  -->
+  </div>
+
+{{end}}

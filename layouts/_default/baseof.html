@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ .Title }}</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/img/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/img/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/img/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/img/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/img/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/img/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/img/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/img/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#243342">
+  <meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png">
+  <meta name="theme-color" content="#243342">
+
+  <link rel="canonical" href="https://www.codiva.io{{ .URL}}">
+
+  <style rel="stylesheet" type="text/css">
+    @import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500';
+
+    * {
+      margin: 0;
+      padding: 0;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+    body {
+      font-family: "Roboto", "Helvetica", "Arial", "Verdana", sans-serif;
+    }
+
+    .mainContainer {
+      clear: both;
+    }
+    .mainContainer:after {
+      clear: both;
+    }
+    .mainContainer ol, .mainContainer ul {
+      padding: 0 0 0 40px;
+    }
+    .mainContainer p {
+      margin: 1em 0;
+    }
+    .header a {
+      text-decoration: none;
+      padding: 1.5em 1em;
+    }
+    .header a:link, .header a:visited {
+      color: white;
+      display: inline-block;
+    }
+
+    .header {
+      padding: 0 10px;
+      height: 4em;
+      xbackground-color: #06065C;
+      background-color: #243342;
+      text-color: white;
+    }
+    .header ul {
+      margin: 0px;
+      padding: 0px;
+    }
+    .logo {
+      display: inline;
+      float: left;
+      font-family: "Heiti SC", "Verdana", sans-serif;
+    }
+    .header .logo a {
+      color: #4cae51;
+    }
+    .top-nav {
+      display: inline;
+      float: left;
+    }
+    .top-nav ul {
+      list-style: none;
+    }
+    .top-nav li {
+      display: inline;
+    }
+    .header .login-signup, .header .new-project {
+      display: "inline";
+      float: right;
+    }
+    .header .login-signup li,  .header .new-project li, .header .new-project li form {
+      display: inline;
+    }
+    .header .new-project li a, .header .new-project li button {
+      margin-top: 0.75em;
+    }
+    .humanText {
+      max-width: 22em;
+      margin: auto;
+    }
+    .header .button {
+      padding: 0.75em 1em;
+    }
+    .bg-orange {
+      background-color: #E56723;
+      color: white;
+    }
+    .bg-green {
+      background-color: #4CAF50; /* Green */
+
+    }
+    #logoutForm {
+      display: inline
+    }
+    #logoutLink {
+       display: inline;
+    }
+    .linkButton {
+       display: inline;
+       background: none;
+       border: none;
+       cursor: pointer;
+       color: white;
+    }
+
+    .button {
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .modalDialog {
+      z-index: 99999;
+      opacity:0;
+      -webkit-transition: opacity 400ms ease-in;
+      -moz-transition: opacity 400ms ease-in;
+      transition: opacity 400ms ease-in;
+      pointer-events: none;
+    }
+     
+    .pagination, .tags {
+      height: 3em;
+    }
+    .pagination li, 
+    .tags li {
+      display: inline;
+      min-height: 3em;
+    }
+    .pagination li a, 
+    .tags li a {
+      display: inline-block;
+      padding: 1em;
+    }
+    .tags {
+      list-style: none;
+    }
+    .main {
+      max-width: 50em;
+      margin: 0 auto; 
+      line-height: 1.5;
+      padding: 1em 1em;
+      color: #555;
+
+    }
+    .main h2, .main h1 {
+      margin-top: 0.5em;
+      padding: 0.5em 0;
+    }
+    .main h1,
+    .main h2,
+    .main strong {
+      color: #333;
+    }
+    .main code,
+    .main pre {
+      background: #eee;
+    }
+
+    .main code {
+      padding: 2px 4px;
+      vertical-align: text-bottom;
+    }
+
+    .main pre {
+      padding: 1em;
+    }
+
+    .main a {
+      color: #4cae51;
+    }
+
+   @media all and (max-width: 650px) {
+    .header {
+      padding: 0px;
+    }
+    .top-nav {
+      display: none;
+    }
+    .screenshot, .explain {
+        float: none;
+        width: 95%;
+        height: auto;
+        padding-top:1em;
+        margin: auto;
+    }
+
+    .screenshot img {
+      max-width: 100%;
+      margin: auto;
+      display: block;
+    }
+   }
+   @media all and (max-width: 340px) {
+     .logo {
+       display: none;
+     }
+   }        
+   </style>
+</head>
+<body>
+
+  <header class="header">
+    <span class="logo">
+      <a href="/">Codiva.io</a>
+    </span>
+      <!-- Handle mobile menu bar -->
+    <nav class="top-nav">
+      <ul>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/profile">My Projects</a></li>
+        <li><a href="/tutorials">Tutorials</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <div class="mainContainer">
+    {{ block "main" . }}
+
+    {{end}}
+    <!--
+    test12
+    {{.Content}}
+  {{ range first 10 .Data.Pages }}
+    {{ if eq .Type "post"}}
+      <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    {{ end }}
+  {{ end }}
+
+  <h1>pages</h1>
+  {{ range .Data.Pages }}
+    {{ if eq .Type "page" }}
+      <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    {{ end }}
+  {{ end }}
+
+  -->
+  </div>
+</body>
+</html>

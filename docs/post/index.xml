@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Codiva.io Online Compiler and IDE | Blog</title>
+    <link>https://www.codiva.io/blog/post/</link>
+    <description>Recent content in Posts on Codiva.io Online Compiler and IDE | Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 11 Dec 2017 23:22:56 -0800</lastBuildDate>
+    
+	<atom:link href="https://www.codiva.io/blog/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>How to Embed Java Programs on Your Blog</title>
+      <link>https://www.codiva.io/blog/post/how-to-embed-java-programs-on-your-blog/</link>
+      <pubDate>Mon, 11 Dec 2017 23:22:56 -0800</pubDate>
+      
+      <guid>https://www.codiva.io/blog/post/how-to-embed-java-programs-on-your-blog/</guid>
+      <description>&lt;p&gt;Do you have a Java tutorials blog?&lt;/p&gt;
+
+&lt;p&gt;Do you want to let your users read and run the programs from your site?&lt;/p&gt;
+
+&lt;p&gt;Then you can embed Codiva project with 3 easy steps.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>How to Compile and Run Java Program Online</title>
+      <link>https://www.codiva.io/blog/post/how-to-compile-and-run-java-program-online/</link>
+      <pubDate>Sun, 10 Dec 2017 18:43:58 -0800</pubDate>
+      
+      <guid>https://www.codiva.io/blog/post/how-to-compile-and-run-java-program-online/</guid>
+      <description>&lt;p&gt;If you are learning Java, or practicing for coding interviews, you need a fast way to run many short programs.&lt;/p&gt;
+
+&lt;p&gt;Codiva Online IDE is best suited for your usecase. No installation needed. Works on Chromebooks and even on mobile.
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

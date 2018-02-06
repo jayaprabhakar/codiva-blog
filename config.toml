@@ -1,0 +1,9 @@
+baseURL = "https://www.codiva.io/blog"
+languageCode = "en-us"
+title = "Codiva.io Online Compiler and IDE | Blog"
+theme = "codiva"
+
+publishDir = "docs"
+
+paginate = 10
+
