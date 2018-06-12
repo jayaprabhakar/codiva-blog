@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>about</title>
+  <title>Serve Home Page From CDN with Cloudflare Worker</title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,7 +23,7 @@
   <meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png">
   <meta name="theme-color" content="#243342">
 
-  <link rel="canonical" href="https://www.codiva.io/blog/about/">
+  <link rel="canonical" href="https://www.codiva.io/blog/post/serve-home-page-from-cdn-cloudflare-worker/">
 
   <style rel="stylesheet" type="text/css">
     @import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500';
@@ -257,17 +257,116 @@
   <div class="mainContainer">
     
   <div class="main">
-    <h2>about</h2>
-    
+    <h2>Serve Home Page From CDN with Cloudflare Worker</h2>
+    <p>Cloudflare Service Worker helped Codiva jump at least 2 positions in Google by speading up home page response. I did it by serving the new users (and search crawler) from the edge, and avoiding redirects for logged in users.</p>
 
-<h1 id="about-us">about us</h1>
+<p>Let us take a look at the undocumented hack using Cloudflare workers.
+</p>
 
-<p>i&rsquo;m speechless</p>
+<p>You are building a SAAS product. When a user is logged in, the home page should show the user&rsquo;s personal content. If the user is not logged in, it should show the home page that convinces users&rsquo; to sign up or login (typically static content).</p>
 
+<p>Ideally, you want the static content to be served from CDN. At the same time, you would want to avoid redirects to the logged in user.</p>
+
+<p>If you are a developer consious of latency, you would want to serve as much content as quickly as possible. Reducing latency improves engagement. Also, Google crawler, considers latency as a ranking parameter.</p>
+
+<p>The ultimate latency reduction guideline is to</p>
+
+<blockquote>
+<p>Serve <em>less data</em> over <em>short distance</em> with an <em>efficient protocol</em>.</p>
+</blockquote>
+
+<p>This post assumes, you already know
+1.  Content Delivery Network
+1.  Service Worker
+1.  Basic web terminologies like Cookies, Cache, Requests, etc</p>
+
+<p>Let us see the various scenarios for the traffic and see how to improve in each case.</p>
+
+<ol>
+<li>Existing user - logged in</li>
+<li>Existing user - not logged in</li>
+<li>First time user.</li>
+</ol>
+
+<h3 id="existing-user-logged-in-or-not-logged-in">Existing user (logged in or not logged in)</h3>
+
+<p>For existing users, the biggest optimization you could do is to minimize amount of data transferred.</p>
+
+<p>You could do that with Service Worker to intercept the request, and fetch only the dynamic content and render using the prefetched template.</p>
+
+<p>I will explain that technique in detain in a later post.</p>
+
+<h3 id="first-time-user-real-user-or-web-crawler">First time user (Real user or web crawler)</h3>
+
+<p>For the first time user, there is not much optimization you could make. There is no data cached. Also, the request has to go to the server to determine if the user is logged in.
+Required to decide whether to serve the static content or the dynamic personalized content.</p>
+
+<p>This trick lies in identifying whether the user is a first time user or existing user. We do it by looking at the cookies.</p>
+
+<p><a href="https://www.codiva.io/">Codiva</a> uses Express with Node. Express sets &lsquo;connect.sid&rsquo; cookie on every response. In Cloudflare Service Worker, we could simply check if this cookie is set. If not, respond with the static home page.</p>
+
+<p>Otherwise, send the request to the server. (Optimizing this case is in later post).</p>
+
+<pre><code>  if (event.request.headers.has('Cookie')
+        &amp;&amp; event.request.headers.get('Cookie').indexOf('connect.sid')&gt;=0) {
+      // Existing user.  
+      event.respondWith(fetch(event.request));
+    } else {
+      // You may need to set the Page Rule to cache .html files
+      var newUrl = new URL('/static/homepage.html', event.request.url);
+
+      event.respondWith(fetch(newUrl.toString())
+          .then(function(response){
+                // Fix some headers
+
+                var init = {
+                    status:     response.status,
+                    statusText: response.statusText,
+                    headers:    {
+                      'Content-Type': 'text/html;charset=UTF-8'
+
+                    }
+                };
+
+                for (var pair of response.headers.entries()) {
+                  if (pair[0] !== 'expires'
+                      &amp;&amp; pair[0] !== 'cache-control') {
+                    init.headers[pair[0]] = pair[1];
+                  }
+                }
+
+                return response.text().then(function(body){
+                    return new Response(body, init);
+                });
+            }
+
+          ));
+    }
+</code></pre>
+
+<p>If you use other technologies, find the correct cookie. This does not need any change on the downstream server. You could do some sophisticated processing here to identify the right cookie. If you want to modify the server, you could even set a separate cookie when a user logs in. (Remember, the cookie might get invalid. So cookie present just means the user may be logged in. But cookie not present clearly means the user is not logged in.)</p>
+
+<p>The advantage of this solution are.</p>
+
+<ol>
+<li>No changes needed on the downstream server.</li>
+<li>Very simple to implement and debug</li>
+<li>Serves the first time user from the edge. Whether the user comes from search result, search ad, or from direct or other referrals</li>
+<li>Search Crawler will see the same content and faster. This is not a blackhat technique.</li>
+<li>No redirects for logged in user (Try <a href="https://www.gmail.com">Gmail</a> to see the annoying redirects for logged in user.)</li>
+</ol>
 
     
 <ul id="tags" class="tags">
   
+  	
+	Tags: 
+	
+  
+  
+    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
+  
+    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
   
 </ul>
 

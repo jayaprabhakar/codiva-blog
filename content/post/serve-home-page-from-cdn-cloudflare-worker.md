@@ -3,7 +3,7 @@ title: "Serve Home Page From CDN with Cloudflare Worker"
 pageTitle: "Serve Home Page From CDN with Cloudflare Worker | Codiva Online Compiler Blog"
 
 date: 2018-06-12T00:50:46-07:00
-draft: true
+draft: false
 tags: [Cloudflare,ServiceWorker]
 ---
 
