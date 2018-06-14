@@ -50,7 +50,7 @@ addEventListener('fetch', event => {
 async function handleBlog(event, url) {
   var originUrl = url.toString().replace(
     'https://www.codiva.io/blog',
-   'https://jayaprabhakar.github.io/codiva-blog');
+   'https://example.github.io/codiva-blog');
   event.respondWith(fetch(originUrl)); 
 }
 
