@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Posts</title>
+  <title>Host Saas Product Blog in Subdirectory Instead of Subdomain</title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,7 +23,7 @@
   <meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png">
   <meta name="theme-color" content="#243342">
 
-  <link rel="canonical" href="https://www.codiva.io/blog/post/">
+  <link rel="canonical" href="https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/">
 
   <style rel="stylesheet" type="text/css">
     @import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500';
@@ -257,102 +257,67 @@
   <div class="mainContainer">
     
   <div class="main">
+    <h2>Host Saas Product Blog in Subdirectory Instead of Subdomain</h2>
+    <p>You have a SAAS product. Now you want to add articles, blogs, tutorials, etc to support your product or for content marketing and SEO. Should you have these hosted as a subdomain (<a href="https://blog.example.com">https://blog.example.com</a>) or as a subdirectory (<a href="https://example.com/blog)?">https://example.com/blog)?</a>
+</p>
+
+<p>Google&rsquo;s official guideline is a bit vague (Do the right thing for your user and your long term plan.), but many SEO experts believe, subdirectory (/blog) is the right choice.</p>
+
+<p>As a developer, I would prefer to have a subdomain. Because, I could simply add a <em>A record</em> or <em>CNAME entry</em> in the DNS and point to my blog host (Wordpress or GitHub pages).
+It is simple and fast with negligible overhead. A DNS lookup for the first request, then everything is cached.</p>
+
+<p>However, hosting as a subdirectory is a bit slow. You will have to configure on your webserver. If you use NGINX, it will be something like,</p>
+
+<pre><code>location /blog {
+  proxy_pass etc..
+}
+</code></pre>
+
+<p>Then, for each request, the request will first reach your server that will then be sent to the blog host. The response from the blog host will then get proxied back to the user.</p>
+
+<p>This is unnecessarily slow. Codiva blog is hosted in GitHub pages, that is globally distributed superfast server. But the rest of my site is locaated only in the US. Global replication is expensive. With the subdirectory, approach, users&rsquo; request anywhere in the world will reach the US servers, then get proxied to somewhere near my server.</p>
+
+<p>As a developer sensitive to latency issues, I hate this.</p>
+
+<p>But not any more. Enter <em>Cloudflare Service Worker</em>.</p>
+
+<h3 id="cloudflare-service-workers-config">Cloudflare Service Workers config</h3>
+
+<p>Codiva.io Blog is hosted in Github Pages with https. The github url looks something like <a href="https://username.github.io/codiva-blog">https://username.github.io/codiva-blog</a>. I want this to be served as <a href="https://www.codiva.io/blog">https://www.codiva.io/blog</a></p>
+
+<p>In cloudflare worker, intercept the request. If the url path starts with /blog/, fetch the request from github instead.</p>
+
+<pre><code>addEventListener('fetch', event =&gt; {
+  var url = new URL(event.request.url);
+  if (url.pathname.startsWith('/blog/') || url.pathname === '/blog') {
+    handleBlog(event, url);
+  } else {
+    event.respondWith(fetch(event.request));
+  }
+})
+
+async function handleBlog(event, url) {
+  var originUrl = url.toString().replace(
+    'https://www.codiva.io/blog',
+   'https://jayaprabhakar.github.io/codiva-blog');
+  event.respondWith(fetch(originUrl)); 
+}
+
+</code></pre>
+
+<p>This is very similar to the proxy_pass solution. Except, this runs in Cloudflare CDN close to the user and much more widely distributed than most blog hosting platforms.</p>
+
+<p>This solution is much faster than proxy_pass on your webserver.</p>
 
     
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/">Host Saas Product Blog in Subdirectory Instead of Subdomain</a></h2>
-   
-        <p>You have a SAAS product. Now you want to add articles, blogs, tutorials, etc to support your product or for content marketing and SEO. Should you have these hosted as a subdomain (<a href="https://blog.example.com">https://blog.example.com</a>) or as a subdirectory (<a href="https://example.com/blog)?">https://example.com/blog)?</a>
-</p>
-        <a href="https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/">Read More...</a>
-
-        
 <ul id="tags" class="tags">
   
   	
   
   
 </ul>
-
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/serve-home-page-from-cdn-cloudflare-worker/">Serve Home Page From CDN with Cloudflare Worker</a></h2>
-   
-        <p>Cloudflare Service Worker helped Codiva jump at least 2 positions in Google by speading up home page response. I did it by serving the new users (and search crawler) from the edge, and avoiding redirects for logged in users.</p>
-
-<p>Let us take a look at the undocumented hack using Cloudflare workers.
-</p>
-        <a href="https://www.codiva.io/blog/post/serve-home-page-from-cdn-cloudflare-worker/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-	Tags: 
-	
-  
-  
-    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
-  
-    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
-  
-</ul>
-
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/how-to-embed-java-programs-on-your-blog/">How to Embed Java Programs on Your Blog</a></h2>
-   
-        <p>Do you have a Java tutorials blog?</p>
-
-<p>Do you want to let your users read and run the programs from your site?</p>
-
-<p>Then you can embed Codiva project with 3 easy steps.
-</p>
-        <a href="https://www.codiva.io/blog/post/how-to-embed-java-programs-on-your-blog/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-  
-  
-</ul>
-
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/how-to-compile-and-run-java-program-online/">How to Compile and Run Java Program Online</a></h2>
-   
-        <p>If you are learning Java, or practicing for coding interviews, you need a fast way to run many short programs.</p>
-
-<p>Codiva Online IDE is best suited for your usecase. No installation needed. Works on Chromebooks and even on mobile.
-</p>
-        <a href="https://www.codiva.io/blog/post/how-to-compile-and-run-java-program-online/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-  
-  
-</ul>
-
-
-        <hr>
-
-    
-
-    
-
 
   </div>
-
 
     
   </div>
