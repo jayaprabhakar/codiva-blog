@@ -67,27 +67,11 @@ Otherwise, send the request to the server. (Optimizing this case is in later pos
 
       event.respondWith(fetch(newUrl.toString())
           .then(function(response){
-                // Fix some headers
-
-                var init = {
-                    status:     response.status,
-                    statusText: response.statusText,
-                    headers:    {
-                      'Content-Type': 'text/html;charset=UTF-8'
-
-                    }
-                };
-
-                for (var pair of response.headers.entries()) {
-                  if (pair[0] !== 'expires'
-                      && pair[0] !== 'cache-control') {
-                    init.headers[pair[0]] = pair[1];
-                  }
-                }
-
-                return response.text().then(function(body){
-                    return new Response(body, init);
-                });
+                // Remove cache headers
+                response = new Response(response.body, response)
+                response.headers.delete('expires')
+                response.headers.delete('cache-control')
+                return response  
             }
 
           ));
