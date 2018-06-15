@@ -34,12 +34,24 @@
   
   <url>
     <loc>https://www.codiva.io/blog/tags/cloudflare/</loc>
-    <lastmod>2018-06-12T00:50:46-07:00</lastmod>
+    <lastmod>2018-06-13T23:48:26-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.codiva.io/blog/</loc>
+    <lastmod>2018-06-13T23:48:26-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.codiva.io/blog/tags/hosting/</loc>
+    <lastmod>2018-06-13T23:48:26-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.codiva.io/blog/tags/latency/</loc>
     <lastmod>2018-06-13T23:48:26-07:00</lastmod>
     <priority>0</priority>
   </url>
@@ -52,13 +64,19 @@
   
   <url>
     <loc>https://www.codiva.io/blog/tags/serviceworker/</loc>
-    <lastmod>2018-06-12T00:50:46-07:00</lastmod>
+    <lastmod>2018-06-13T23:48:26-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.codiva.io/blog/tags/</loc>
-    <lastmod>2018-06-12T00:50:46-07:00</lastmod>
+    <lastmod>2018-06-13T23:48:26-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.codiva.io/blog/tags/web/</loc>
+    <lastmod>2018-06-13T23:48:26-07:00</lastmod>
     <priority>0</priority>
   </url>
   

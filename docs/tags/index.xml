@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Codiva.io Online Compiler and IDE | Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 12 Jun 2018 00:50:46 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 13 Jun 2018 23:48:26 -0700</lastBuildDate>
     
 	<atom:link href="https://www.codiva.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,18 +14,45 @@
     <item>
       <title>Cloudflare</title>
       <link>https://www.codiva.io/blog/tags/cloudflare/</link>
-      <pubDate>Tue, 12 Jun 2018 00:50:46 -0700</pubDate>
+      <pubDate>Wed, 13 Jun 2018 23:48:26 -0700</pubDate>
       
       <guid>https://www.codiva.io/blog/tags/cloudflare/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>Hosting</title>
+      <link>https://www.codiva.io/blog/tags/hosting/</link>
+      <pubDate>Wed, 13 Jun 2018 23:48:26 -0700</pubDate>
+      
+      <guid>https://www.codiva.io/blog/tags/hosting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Latency</title>
+      <link>https://www.codiva.io/blog/tags/latency/</link>
+      <pubDate>Wed, 13 Jun 2018 23:48:26 -0700</pubDate>
+      
+      <guid>https://www.codiva.io/blog/tags/latency/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Serviceworker</title>
       <link>https://www.codiva.io/blog/tags/serviceworker/</link>
-      <pubDate>Tue, 12 Jun 2018 00:50:46 -0700</pubDate>
+      <pubDate>Wed, 13 Jun 2018 23:48:26 -0700</pubDate>
       
       <guid>https://www.codiva.io/blog/tags/serviceworker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Web</title>
+      <link>https://www.codiva.io/blog/tags/web/</link>
+      <pubDate>Wed, 13 Jun 2018 23:48:26 -0700</pubDate>
+      
+      <guid>https://www.codiva.io/blog/tags/web/</guid>
       <description></description>
     </item>
     

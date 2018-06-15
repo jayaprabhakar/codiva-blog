@@ -4,7 +4,7 @@ pageTitle: "Host Saas Product Blog in Subdirectory Instead of Subdomain | Codiva
 
 date: 2018-06-13T23:48:26-07:00
 draft: false
-tags: []
+tags: [Cloudflare,ServiceWorker,latency,web,hosting]
 ---
 
 You have a SAAS product. Now you want to add articles, blogs, tutorials, etc to support your product or for content marketing and SEO. Should you have these hosted as a subdomain (https://blog.example.com) or as a subdirectory (https://example.com/blog)?

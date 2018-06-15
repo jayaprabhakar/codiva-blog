@@ -6,10 +6,20 @@
     <description>Recent content in Serviceworker on Codiva.io Online Compiler and IDE | Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 12 Jun 2018 00:50:46 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 13 Jun 2018 23:48:26 -0700</lastBuildDate>
     
 	<atom:link href="https://www.codiva.io/blog/tags/serviceworker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Host Saas Product Blog in Subdirectory Instead of Subdomain</title>
+      <link>https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/</link>
+      <pubDate>Wed, 13 Jun 2018 23:48:26 -0700</pubDate>
+      
+      <guid>https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/</guid>
+      <description>&lt;p&gt;You have a SAAS product. Now you want to add articles, blogs, tutorials, etc to support your product or for content marketing and SEO. Should you have these hosted as a subdomain (&lt;a href=&#34;https://blog.example.com&#34;&gt;https://blog.example.com&lt;/a&gt;) or as a subdirectory (&lt;a href=&#34;https://example.com/blog)?&#34;&gt;https://example.com/blog)?&lt;/a&gt;
+&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Serve Home Page From CDN with Cloudflare Worker</title>

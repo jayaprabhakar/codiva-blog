@@ -4,7 +4,7 @@ pageTitle: "Serve Home Page From CDN with Cloudflare Worker | Codiva Online Comp
 
 date: 2018-06-12T00:50:46-07:00
 draft: false
-tags: [Cloudflare,ServiceWorker]
+tags: [Cloudflare,ServiceWorker,latency,web,hosting]
 ---
 
 Cloudflare Service Worker helped Codiva jump at least 2 positions in Google by speading up home page response. I did it by serving the new users (and search crawler) from the edge, and avoiding redirects for logged in users.
