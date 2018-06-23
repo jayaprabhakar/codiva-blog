@@ -1,10 +1,14 @@
 <amp-iframe width="100vw" height="100vw"
-    sandbox="allow-scripts allow-same-origin"
+    sandbox="allow-scripts"
     layout="responsive"
 	frameborder="0"
 	sizes="(min-width: 600px) 600px,(min-width: 400px) 95vw, 100vw"
     src="https://www.codiva.io/em/p/{{.Get `id`}}">
-	  <div placeholder></div>
+	  <div placeholder>
+	    <pre>
+	      {{.Inner}}
+		<pre>
+      </div>
 </amp-iframe>
 <!--
 <iframe src="https://www.codiva.io/em/p/{{.Get `id`}}" style="height: 600px; min-height: 420px; max-height: 90vh; width: 100%; overflow: hidden;">
