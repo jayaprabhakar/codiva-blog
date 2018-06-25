@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html ⚡>
 <head>
-  <title>Latency</title>
+  <title>Custom Load Balancing With Cloudflare Worker</title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 
@@ -23,8 +23,8 @@
   <meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png">
   <meta name="theme-color" content="#243342">
 
-  <link rel="canonical" href="https://www.codiva.io/blog/tags/latency/">
-  <link rel="amphtml" href="https://www.codiva.io/blog/tags/latency/">
+  <link rel="canonical" href="https://www.codiva.io/blog/post/custom-load-balancing-with-cloudflare-worker/">
+  <link rel="amphtml" href="https://www.codiva.io/blog/post/custom-load-balancing-with-cloudflare-worker/">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <style amp-custom>
      
@@ -264,19 +264,175 @@
   <div class="mainContainer">
     
   <div class="main">
-
-    
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/custom-load-balancing-with-cloudflare-worker/">Custom Load Balancing With Cloudflare Worker</a></h2>
-   
-        <p>Launched your website? Getting lot of traffic? And you are planning to add more servers? You will need load balanacers for scalability and reliability of your website.</p>
+    <h2>Custom Load Balancing With Cloudflare Worker</h2>
+    <p>Launched your website? Getting lot of traffic? And you are planning to add more servers? You will need load balanacers for scalability and reliability of your website.</p>
 
 <p>In this post, we will learn about load balancers and how to set them up at a low cost with Cloudflare Service Workers.
 </p>
-        <a href="https://www.codiva.io/blog/post/custom-load-balancing-with-cloudflare-worker/">Read More...</a>
 
-        
+<p>This post assumes you know</p>
+
+<ul>
+<li>JavaScript</li>
+<li>ServiceWorker</li>
+<li>Cloudflare Worker</li>
+</ul>
+
+<h2 id="the-basic-pattern">The basic pattern</h2>
+
+<p>Intercept a request, and send the request to a different host.</p>
+
+<pre><code>addEventListener('fetch', event =&gt; {
+  var url = new URL(event.request.url);
+
+  // https://example.com/path/ to https://myorigin.example.com/path
+  url.hostname = 'myorigin.' + url.hostname
+  
+  event.respondWith(fetch(event.request));
+});
+
+</code></pre>
+
+<p>This doesn&rsquo;t do anything useful yet, but this is the basic pattern that will be used in the rest of the examples.</p>
+
+<h2 id="load-balancer-with-random-routing">Load balancer with random routing</h2>
+
+<p>When you have a list of origin servers, pick a random host to route to.</p>
+
+<p>This is a very basic load balancing technique to evenly distribute the traffic across all origin servers.</p>
+
+<pre><code>var hostnames = [
+  0.example.com,
+  1.example.com,
+  2.example.com
+];
+
+addEventListener('fetch', event =&gt; {
+  var url = new URL(event.request.url);
+
+  // Randomly pick the next host 
+  url.hostname = hostnames[getRandomInt(hostnames.length)];
+  
+  event.respondWith(fetch(event.request));
+});
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+</code></pre>
+
+<h2 id="load-balancer-with-fallback">Load balancer with fallback</h2>
+
+<p>What to do when the host is down? A simple fallback strategy to route the request to a different host. Use this only if you know the request are idempotent. Mostly GET requests should be okay.</p>
+
+<pre><code>
+addEventListener('fetch', event =&gt; {
+  var url = new URL(event.request.url);
+
+  // Randomly pick the primary host
+  var primary = getRandomInt(hostnames.length);
+  url.hostname = hostnames[primary];
+
+  var timeoutId = setTimeout(function() {
+    var backup;
+    do {
+        // Naive solution to pick a backup host
+        backup = getRandomInt(hostnames.length);
+    } while(backup === primary);
+
+  }, 2000 /* 2 seconds */);
+
+  fetch(event.request)
+    .then(function(response) {
+        clearTimeout(timeoutId);
+        event.respondWith(response);
+    });
+});
+
+</code></pre>
+
+<h2 id="sticky-routing">Sticky routing</h2>
+
+<p>You may want to route the subsequent requests from the same user to the same host. This can reduce the latency, if the backend caches the data effectively.</p>
+
+<h2 id="geographic-routing">Geographic routing</h2>
+
+<p>Cloudflare adds <a href="https://support.cloudflare.com/hc/en-us/articles/200168236-What-does-Cloudflare-IP-Geolocation-do-">CF-IPCountry</a> header to all requests once Cloudflare IP Geolocation is enabled.</p>
+
+<p>You can access it using,</p>
+
+<pre><code>var countryCode = req.headers.get('CF-IPCountry');
+</code></pre>
+
+<p>You may need to provide a mapping of which countries to use which datacenter. If you are starting out, look at the places with most users for your site, and target only those countries.</p>
+
+<p>In my case, India and the US contributes 80% of the traffic. So, for India and its neighbors, use India datacenter. For all others, use the US datacenters.</p>
+
+<pre><code>const US_HOST = &quot;us.example.com&quot;
+const IN_HOST = &quot;in.example.com&quot;
+
+var COUNTRIES_MAP = {
+  IN: IN_HOST,
+  PK: IN_HOST,
+  BD: IN_HOST,
+  SL: IN_HOST,
+  NL: IN_HOST
+}
+addEventListener('fetch', event =&gt; {
+  var url = new URL(event.request.url);
+
+  var countryCode = req.headers.get('CF-IPCountry');
+  if (COUNTRIES_MAP[countryCode]) {
+    url.hostname = COUNTRIES_MAP[countryCode];
+  } else {
+    url.hostname = US_HOST;
+  }
+  
+  event.respondWith(fetch(event.request));
+});
+</code></pre>
+
+<h2 id="geographic-routing-with-random-random-loadbalancing-within-datacenter">Geographic routing with random random loadbalancing within datacenter</h2>
+
+<pre><code>const US_HOSTS = [
+  0.us.example.com,
+  1.us.example.com,
+  2.us.example.com
+];
+
+const IN_HOSTS = [
+  0.in.example.com,
+  1.in.example.com,
+  2.in.example.com
+];
+
+var COUNTRIES_MAP = {
+  IN: IN_HOSTS,
+  PK: IN_HOSTS,
+  BD: IN_HOSTS,
+  SL: IN_HOSTS,
+  NL: IN_HOSTS
+}
+addEventListener('fetch', event =&gt; {
+  var url = new URL(event.request.url);
+
+  var countryCode = req.headers.get('CF-IPCountry');
+  var hostnames = US_HOSTS;
+  if (COUNTRIES_MAP[countryCode]) {
+    hostnames = COUNTRIES_MAP[countryCode];
+  }
+  // Randomly pick the next host 
+  url.hostname = hostnames[getRandomInt(hostnames.length)];
+  
+  event.respondWith(fetch(event.request));
+});
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+</code></pre>
+
+    
 <ul id="tags" class="tags">
   
   	
@@ -296,78 +452,7 @@
   
 </ul>
 
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/">Host Saas Product Blog in Subdirectory Instead of Subdomain</a></h2>
-   
-        <p>You have a SAAS product. Now you want to add articles, blogs, tutorials, etc to support your product or for content marketing and SEO. Should you have these hosted as a subdomain (<a href="https://blog.example.com">https://blog.example.com</a>) or as a subdirectory (<a href="https://example.com/blog)?">https://example.com/blog)?</a>
-</p>
-        <a href="https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-	Tags: 
-	
-  
-  
-    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
-  
-    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
-  
-    <li><a href="/blog/tags/latency">latency</a> </li>
-  
-    <li><a href="/blog/tags/web">web</a> </li>
-  
-    <li><a href="/blog/tags/hosting">hosting</a> </li>
-  
-</ul>
-
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/serve-home-page-from-cdn-cloudflare-worker/">Serve Home Page From CDN with Cloudflare Worker</a></h2>
-   
-        <p>Cloudflare Service Worker helped Codiva jump at least 2 positions in Google by speading up home page response. I did it by serving the new users (and search crawler) from the edge, and avoiding redirects for logged in users.</p>
-
-<p>Let us take a look at the undocumented hack using Cloudflare workers.
-</p>
-        <a href="https://www.codiva.io/blog/post/serve-home-page-from-cdn-cloudflare-worker/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-	Tags: 
-	
-  
-  
-    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
-  
-    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
-  
-    <li><a href="/blog/tags/latency">latency</a> </li>
-  
-    <li><a href="/blog/tags/web">web</a> </li>
-  
-    <li><a href="/blog/tags/hosting">hosting</a> </li>
-  
-</ul>
-
-
-        <hr>
-
-    
-
-    
-
-
   </div>
-
 
     
   </div>
