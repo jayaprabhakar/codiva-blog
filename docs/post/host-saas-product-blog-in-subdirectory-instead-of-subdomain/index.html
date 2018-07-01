@@ -191,18 +191,10 @@
     .main strong {
       color: #333;
     }
-    .main code,
-    .main pre {
-      background: #eee;
-    }
-
-    .main code {
-      padding: 2px 4px;
-      vertical-align: text-bottom;
-    }
 
     .main pre {
       padding: 1em;
+      xbackground: #eee;
     }
 
     .main a {
@@ -234,7 +226,76 @@
      .logo {
        display: none;
      }
-   }        
+   } 
+
+ 
+ 
+  .chroma { color: #f8f8f2; background-color: #272822 }
+  .chroma .err { color: #960050; background-color: #1e0010 }
+  .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+  .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
+  .chroma .hl { display: block; width: 100%;background-color: #ffffcc }
+  .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+  .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+  .chroma .k { color: #66d9ef }
+  .chroma .kc { color: #66d9ef }
+  .chroma .kd { color: #66d9ef }
+  .chroma .kn { color: #f92672 }
+  .chroma .kp { color: #66d9ef }
+  .chroma .kr { color: #66d9ef }
+  .chroma .kt { color: #66d9ef }
+  .chroma .na { color: #a6e22e }
+  .chroma .nc { color: #a6e22e }
+  .chroma .no { color: #66d9ef }
+  .chroma .nd { color: #a6e22e }
+  .chroma .ne { color: #a6e22e }
+  .chroma .nf { color: #a6e22e }
+  .chroma .nx { color: #a6e22e }
+  .chroma .nt { color: #f92672 }
+  .chroma .l { color: #ae81ff }
+  .chroma .ld { color: #e6db74 }
+  .chroma .s { color: #e6db74 }
+  .chroma .sa { color: #e6db74 }
+  .chroma .sb { color: #e6db74 }
+  .chroma .sc { color: #e6db74 }
+  .chroma .dl { color: #e6db74 }
+  .chroma .sd { color: #e6db74 }
+  .chroma .s2 { color: #e6db74 }
+  .chroma .se { color: #ae81ff }
+  .chroma .sh { color: #e6db74 }
+  .chroma .si { color: #e6db74 }
+  .chroma .sx { color: #e6db74 }
+  .chroma .sr { color: #e6db74 }
+  .chroma .s1 { color: #e6db74 }
+  .chroma .ss { color: #e6db74 }
+  .chroma .m { color: #ae81ff }
+  .chroma .mb { color: #ae81ff }
+  .chroma .mf { color: #ae81ff }
+  .chroma .mh { color: #ae81ff }
+  .chroma .mi { color: #ae81ff }
+  .chroma .il { color: #ae81ff }
+  .chroma .mo { color: #ae81ff }
+  .chroma .o { color: #f92672 }
+  .chroma .ow { color: #f92672 }
+  .chroma .c { color: #75715e }
+  .chroma .ch { color: #75715e }
+  .chroma .cm { color: #75715e }
+  .chroma .c1 { color: #75715e }
+  .chroma .cs { color: #75715e }
+  .chroma .cp { color: #75715e }
+  .chroma .cpf { color: #75715e }
+  .chroma .gd { color: #f92672 }
+  .chroma .ge { font-style: italic }
+  .chroma .gi { color: #a6e22e }
+  .chroma .gs { font-weight: bold }
+  .chroma .gu { color: #75715e }
+
+ 
+
+ 
+
+
+
    </style>
 
   <script async src="https://cdn.ampproject.org/v0.js"></script>
@@ -273,12 +334,9 @@
 It is simple and fast with negligible overhead. A DNS lookup for the first request, then everything is cached.</p>
 
 <p>However, hosting as a subdirectory is a bit slow. You will have to configure on your webserver. If you use NGINX, it will be something like,</p>
-
-<pre><code>location /blog {
-  proxy_pass etc..
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">location</span> <span class="s">/blog</span> <span class="p">{</span>
+  <span class="kn">proxy_pass</span> <span class="s">etc</span> <span class="s">...</span>
+<span class="err">}</span></code></pre></div>
 <p>Then, for each request, the request will first reach your server that will then be sent to the blog host. The response from the blog host will then get proxied back to the user.</p>
 
 <p>This is unnecessarily slow. Codiva blog is hosted in GitHub pages, that is globally distributed superfast server. But the rest of my site is locaated only in the US. Global replication is expensive. With the subdirectory, approach, users&rsquo; request anywhere in the world will reach the US servers, then get proxied to somewhere near my server.</p>
@@ -292,25 +350,22 @@ It is simple and fast with negligible overhead. A DNS lookup for the first reque
 <p>Codiva.io Blog is hosted in Github Pages with https. The github url looks something like <a href="https://username.github.io/codiva-blog">https://username.github.io/codiva-blog</a>. I want this to be served as <a href="https://www.codiva.io/blog">https://www.codiva.io/blog</a></p>
 
 <p>In cloudflare worker, intercept the request. If the url path starts with /blog/, fetch the request from github instead.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;fetch&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">url</span><span class="p">.</span><span class="nx">pathname</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">&#39;/blog/&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="nx">url</span><span class="p">.</span><span class="nx">pathname</span> <span class="o">===</span> <span class="s1">&#39;/blog&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">handleBlog</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">url</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">})</span>
 
-<pre><code>addEventListener('fetch', event =&gt; {
-  var url = new URL(event.request.url);
-  if (url.pathname.startsWith('/blog/') || url.pathname === '/blog') {
-    handleBlog(event, url);
-  } else {
-    event.respondWith(fetch(event.request));
-  }
-})
-
-async function handleBlog(event, url) {
-  var originUrl = url.toString().replace(
-    'https://www.codiva.io/blog',
-   'https://example.github.io/codiva-blog');
-  event.respondWith(fetch(originUrl)); 
-}
-
-</code></pre>
-
+<span class="kr">async</span> <span class="kd">function</span> <span class="nx">handleBlog</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">originUrl</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span>
+    <span class="s1">&#39;https://www.codiva.io/blog&#39;</span><span class="p">,</span>
+   <span class="s1">&#39;https://example.github.io/codiva-blog&#39;</span><span class="p">);</span>
+  <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">originUrl</span><span class="p">));</span> 
+<span class="p">}</span>
+</code></pre></div>
 <p>This is very similar to the proxy_pass solution. Except, this runs in Cloudflare CDN close to the user and much more widely distributed than most blog hosting platforms.</p>
 
 <p>This solution is much faster than proxy_pass on your webserver.</p>

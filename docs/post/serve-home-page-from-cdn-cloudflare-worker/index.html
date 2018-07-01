@@ -191,18 +191,10 @@
     .main strong {
       color: #333;
     }
-    .main code,
-    .main pre {
-      background: #eee;
-    }
-
-    .main code {
-      padding: 2px 4px;
-      vertical-align: text-bottom;
-    }
 
     .main pre {
       padding: 1em;
+      xbackground: #eee;
     }
 
     .main a {
@@ -234,7 +226,76 @@
      .logo {
        display: none;
      }
-   }        
+   } 
+
+ 
+ 
+  .chroma { color: #f8f8f2; background-color: #272822 }
+  .chroma .err { color: #960050; background-color: #1e0010 }
+  .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+  .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
+  .chroma .hl { display: block; width: 100%;background-color: #ffffcc }
+  .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+  .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+  .chroma .k { color: #66d9ef }
+  .chroma .kc { color: #66d9ef }
+  .chroma .kd { color: #66d9ef }
+  .chroma .kn { color: #f92672 }
+  .chroma .kp { color: #66d9ef }
+  .chroma .kr { color: #66d9ef }
+  .chroma .kt { color: #66d9ef }
+  .chroma .na { color: #a6e22e }
+  .chroma .nc { color: #a6e22e }
+  .chroma .no { color: #66d9ef }
+  .chroma .nd { color: #a6e22e }
+  .chroma .ne { color: #a6e22e }
+  .chroma .nf { color: #a6e22e }
+  .chroma .nx { color: #a6e22e }
+  .chroma .nt { color: #f92672 }
+  .chroma .l { color: #ae81ff }
+  .chroma .ld { color: #e6db74 }
+  .chroma .s { color: #e6db74 }
+  .chroma .sa { color: #e6db74 }
+  .chroma .sb { color: #e6db74 }
+  .chroma .sc { color: #e6db74 }
+  .chroma .dl { color: #e6db74 }
+  .chroma .sd { color: #e6db74 }
+  .chroma .s2 { color: #e6db74 }
+  .chroma .se { color: #ae81ff }
+  .chroma .sh { color: #e6db74 }
+  .chroma .si { color: #e6db74 }
+  .chroma .sx { color: #e6db74 }
+  .chroma .sr { color: #e6db74 }
+  .chroma .s1 { color: #e6db74 }
+  .chroma .ss { color: #e6db74 }
+  .chroma .m { color: #ae81ff }
+  .chroma .mb { color: #ae81ff }
+  .chroma .mf { color: #ae81ff }
+  .chroma .mh { color: #ae81ff }
+  .chroma .mi { color: #ae81ff }
+  .chroma .il { color: #ae81ff }
+  .chroma .mo { color: #ae81ff }
+  .chroma .o { color: #f92672 }
+  .chroma .ow { color: #f92672 }
+  .chroma .c { color: #75715e }
+  .chroma .ch { color: #75715e }
+  .chroma .cm { color: #75715e }
+  .chroma .c1 { color: #75715e }
+  .chroma .cs { color: #75715e }
+  .chroma .cp { color: #75715e }
+  .chroma .cpf { color: #75715e }
+  .chroma .gd { color: #f92672 }
+  .chroma .ge { font-style: italic }
+  .chroma .gi { color: #a6e22e }
+  .chroma .gs { font-weight: bold }
+  .chroma .gu { color: #75715e }
+
+ 
+
+ 
+
+
+
    </style>
 
   <script async src="https://cdn.ampproject.org/v0.js"></script>
@@ -312,28 +373,26 @@ Required to decide whether to serve the static content or the dynamic personaliz
 <p><a href="https://www.codiva.io/">Codiva</a> uses Express with Node. Express sets &lsquo;connect.sid&rsquo; cookie on every response. In Cloudflare Service Worker, we could simply check if this cookie is set. If not, respond with the static home page.</p>
 
 <p>Otherwise, send the request to the server. (Optimizing this case is in later post).</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript">  <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="s1">&#39;Cookie&#39;</span><span class="p">)</span>
+        <span class="o">&amp;&amp;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;Cookie&#39;</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;connect.sid&#39;</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Existing user.  
+</span><span class="c1"></span>      <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// You may need to set the Page Rule to cache .html files
+</span><span class="c1"></span>      <span class="kd">var</span> <span class="nx">newUrl</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="s1">&#39;/static/homepage.html&#39;</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
 
-<pre><code>  if (event.request.headers.has('Cookie')
-        &amp;&amp; event.request.headers.get('Cookie').indexOf('connect.sid')&gt;=0) {
-      // Existing user.  
-      event.respondWith(fetch(event.request));
-    } else {
-      // You may need to set the Page Rule to cache .html files
-      var newUrl = new URL('/static/homepage.html', event.request.url);
+      <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">newUrl</span><span class="p">.</span><span class="nx">toString</span><span class="p">())</span>
+          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+                <span class="c1">// Remove cache headers
+</span><span class="c1"></span>                <span class="nx">response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span>
+                <span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">&#39;expires&#39;</span><span class="p">)</span>
+                <span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">&#39;cache-control&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nx">response</span>  
+            <span class="p">}</span>
 
-      event.respondWith(fetch(newUrl.toString())
-          .then(function(response){
-                // Remove cache headers
-                response = new Response(response.body, response)
-                response.headers.delete('expires')
-                response.headers.delete('cache-control')
-                return response  
-            }
-
-          ));
-    }
-</code></pre>
-
+          <span class="p">));</span>
+    <span class="p">}</span>
+</code></pre></div>
 <p>If you use other technologies, find the correct cookie. This does not need any change on the downstream server. You could do some sophisticated processing here to identify the right cookie. If you want to modify the server, you could even set a separate cookie when a user logs in. (Remember, the cookie might get invalid. So cookie present just means the user may be logged in. But cookie not present clearly means the user is not logged in.)</p>
 
 <p>The advantage of this solution are.</p>

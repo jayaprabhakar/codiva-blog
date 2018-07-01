@@ -191,18 +191,10 @@
     .main strong {
       color: #333;
     }
-    .main code,
-    .main pre {
-      background: #eee;
-    }
-
-    .main code {
-      padding: 2px 4px;
-      vertical-align: text-bottom;
-    }
 
     .main pre {
       padding: 1em;
+      xbackground: #eee;
     }
 
     .main a {
@@ -234,7 +226,76 @@
      .logo {
        display: none;
      }
-   }        
+   } 
+
+ 
+ 
+  .chroma { color: #f8f8f2; background-color: #272822 }
+  .chroma .err { color: #960050; background-color: #1e0010 }
+  .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+  .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
+  .chroma .hl { display: block; width: 100%;background-color: #ffffcc }
+  .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+  .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+  .chroma .k { color: #66d9ef }
+  .chroma .kc { color: #66d9ef }
+  .chroma .kd { color: #66d9ef }
+  .chroma .kn { color: #f92672 }
+  .chroma .kp { color: #66d9ef }
+  .chroma .kr { color: #66d9ef }
+  .chroma .kt { color: #66d9ef }
+  .chroma .na { color: #a6e22e }
+  .chroma .nc { color: #a6e22e }
+  .chroma .no { color: #66d9ef }
+  .chroma .nd { color: #a6e22e }
+  .chroma .ne { color: #a6e22e }
+  .chroma .nf { color: #a6e22e }
+  .chroma .nx { color: #a6e22e }
+  .chroma .nt { color: #f92672 }
+  .chroma .l { color: #ae81ff }
+  .chroma .ld { color: #e6db74 }
+  .chroma .s { color: #e6db74 }
+  .chroma .sa { color: #e6db74 }
+  .chroma .sb { color: #e6db74 }
+  .chroma .sc { color: #e6db74 }
+  .chroma .dl { color: #e6db74 }
+  .chroma .sd { color: #e6db74 }
+  .chroma .s2 { color: #e6db74 }
+  .chroma .se { color: #ae81ff }
+  .chroma .sh { color: #e6db74 }
+  .chroma .si { color: #e6db74 }
+  .chroma .sx { color: #e6db74 }
+  .chroma .sr { color: #e6db74 }
+  .chroma .s1 { color: #e6db74 }
+  .chroma .ss { color: #e6db74 }
+  .chroma .m { color: #ae81ff }
+  .chroma .mb { color: #ae81ff }
+  .chroma .mf { color: #ae81ff }
+  .chroma .mh { color: #ae81ff }
+  .chroma .mi { color: #ae81ff }
+  .chroma .il { color: #ae81ff }
+  .chroma .mo { color: #ae81ff }
+  .chroma .o { color: #f92672 }
+  .chroma .ow { color: #f92672 }
+  .chroma .c { color: #75715e }
+  .chroma .ch { color: #75715e }
+  .chroma .cm { color: #75715e }
+  .chroma .c1 { color: #75715e }
+  .chroma .cs { color: #75715e }
+  .chroma .cp { color: #75715e }
+  .chroma .cpf { color: #75715e }
+  .chroma .gd { color: #f92672 }
+  .chroma .ge { font-style: italic }
+  .chroma .gi { color: #a6e22e }
+  .chroma .gs { font-weight: bold }
+  .chroma .gu { color: #75715e }
+
+ 
+
+ 
+
+
+
    </style>
 
   <script async src="https://cdn.ampproject.org/v0.js"></script>
@@ -280,18 +341,15 @@
 <h2 id="the-basic-pattern">The basic pattern</h2>
 
 <p>Intercept a request, and send the request to a different host.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;fetch&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
 
-<pre><code>addEventListener('fetch', event =&gt; {
-  var url = new URL(event.request.url);
-
-  // https://example.com/path/ to https://myorigin.example.com/path
-  url.hostname = 'myorigin.' + url.hostname
+  <span class="c1">// https://example.com/path/ to https://myorigin.example.com/path
+</span><span class="c1"></span>  <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="s1">&#39;myorigin.&#39;</span> <span class="o">+</span> <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span>
   
-  event.respondWith(fetch(event.request));
-});
-
-</code></pre>
-
+  <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
+<span class="p">});</span>
+</code></pre></div>
 <p>This doesn&rsquo;t do anything useful yet, but this is the basic pattern that will be used in the rest of the examples.</p>
 
 <h2 id="load-balancer-with-random-routing">Load balancer with random routing</h2>
@@ -299,57 +357,51 @@
 <p>When you have a list of origin servers, pick a random host to route to.</p>
 
 <p>This is a very basic load balancing technique to evenly distribute the traffic across all origin servers.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">hostnames</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="mf">0.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span><span class="p">,</span>
+  <span class="mf">1.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span><span class="p">,</span>
+  <span class="mf">2.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span>
+<span class="p">];</span>
 
-<pre><code>var hostnames = [
-  0.example.com,
-  1.example.com,
-  2.example.com
-];
+<span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;fetch&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
 
-addEventListener('fetch', event =&gt; {
-  var url = new URL(event.request.url);
-
-  // Randomly pick the next host 
-  url.hostname = hostnames[getRandomInt(hostnames.length)];
+  <span class="c1">// Randomly pick the next host 
+</span><span class="c1"></span>  <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="nx">hostnames</span><span class="p">[</span><span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">hostnames</span><span class="p">.</span><span class="nx">length</span><span class="p">)];</span>
   
-  event.respondWith(fetch(event.request));
-});
+  <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
+<span class="p">});</span>
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-</code></pre>
-
+<span class="kd">function</span> <span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">max</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="load-balancer-with-fallback">Load balancer with fallback</h2>
 
 <p>What to do when the host is down? A simple fallback strategy to route the request to a different host. Use this only if you know the request are idempotent. Mostly GET requests should be okay.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;fetch&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
 
-<pre><code>
-addEventListener('fetch', event =&gt; {
-  var url = new URL(event.request.url);
+  <span class="c1">// Randomly pick the primary host
+</span><span class="c1"></span>  <span class="kd">var</span> <span class="nx">primary</span> <span class="o">=</span> <span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">hostnames</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+  <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="nx">hostnames</span><span class="p">[</span><span class="nx">primary</span><span class="p">];</span>
 
-  // Randomly pick the primary host
-  var primary = getRandomInt(hostnames.length);
-  url.hostname = hostnames[primary];
+  <span class="kd">var</span> <span class="nx">timeoutId</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">backup</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="c1">// Naive solution to pick a backup host
+</span><span class="c1"></span>        <span class="nx">backup</span> <span class="o">=</span> <span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">hostnames</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">while</span><span class="p">(</span><span class="nx">backup</span> <span class="o">===</span> <span class="nx">primary</span><span class="p">);</span>
 
-  var timeoutId = setTimeout(function() {
-    var backup;
-    do {
-        // Naive solution to pick a backup host
-        backup = getRandomInt(hostnames.length);
-    } while(backup === primary);
+  <span class="p">},</span> <span class="mi">2000</span> <span class="cm">/* 2 seconds */</span><span class="p">);</span>
 
-  }, 2000 /* 2 seconds */);
-
-  fetch(event.request)
-    .then(function(response) {
-        clearTimeout(timeoutId);
-        event.respondWith(response);
-    });
-});
-
-</code></pre>
-
+  <span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeoutId</span><span class="p">);</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
 <h2 id="sticky-routing">Sticky routing</h2>
 
 <p>You may want to route the subsequent requests from the same user to the same host. This can reduce the latency, if the backend caches the data effectively.</p>
@@ -359,77 +411,72 @@ addEventListener('fetch', event =&gt; {
 <p>Cloudflare adds <a href="https://support.cloudflare.com/hc/en-us/articles/200168236-What-does-Cloudflare-IP-Geolocation-do-">CF-IPCountry</a> header to all requests once Cloudflare IP Geolocation is enabled.</p>
 
 <p>You can access it using,</p>
-
-<pre><code>var countryCode = event.request.headers.get('CF-IPCountry');
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">countryCode</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;CF-IPCountry&#39;</span><span class="p">);</span>
+</code></pre></div>
 <p>You may need to provide a mapping of which countries to use which datacenter. If you are starting out, look at the places with most users for your site, and target only those countries.</p>
 
 <p>In my case, India and the US contributes 80% of the traffic. So, for India and its neighbors, use India datacenter. For all others, use the US datacenters.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">US_HOST</span> <span class="o">=</span> <span class="s2">&#34;us.example.com&#34;</span>
+<span class="k">const</span> <span class="nx">IN_HOST</span> <span class="o">=</span> <span class="s2">&#34;in.example.com&#34;</span>
 
-<pre><code>const US_HOST = &quot;us.example.com&quot;
-const IN_HOST = &quot;in.example.com&quot;
+<span class="kd">var</span> <span class="nx">COUNTRIES_MAP</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">IN</span><span class="o">:</span> <span class="nx">IN_HOST</span><span class="p">,</span>
+  <span class="nx">PK</span><span class="o">:</span> <span class="nx">IN_HOST</span><span class="p">,</span>
+  <span class="nx">BD</span><span class="o">:</span> <span class="nx">IN_HOST</span><span class="p">,</span>
+  <span class="nx">SL</span><span class="o">:</span> <span class="nx">IN_HOST</span><span class="p">,</span>
+  <span class="nx">NL</span><span class="o">:</span> <span class="nx">IN_HOST</span>
+<span class="p">}</span>
+<span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;fetch&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
 
-var COUNTRIES_MAP = {
-  IN: IN_HOST,
-  PK: IN_HOST,
-  BD: IN_HOST,
-  SL: IN_HOST,
-  NL: IN_HOST
-}
-addEventListener('fetch', event =&gt; {
-  var url = new URL(event.request.url);
-
-  var countryCode = event.request.headers.get('CF-IPCountry');
-  if (COUNTRIES_MAP[countryCode]) {
-    url.hostname = COUNTRIES_MAP[countryCode];
-  } else {
-    url.hostname = US_HOST;
-  }
+  <span class="kd">var</span> <span class="nx">countryCode</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;CF-IPCountry&#39;</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">COUNTRIES_MAP</span><span class="p">[</span><span class="nx">countryCode</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="nx">COUNTRIES_MAP</span><span class="p">[</span><span class="nx">countryCode</span><span class="p">];</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="nx">US_HOST</span><span class="p">;</span>
+  <span class="p">}</span>
   
-  event.respondWith(fetch(event.request));
-});
-</code></pre>
-
+  <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
+<span class="p">});</span>
+</code></pre></div>
 <h2 id="geographic-routing-with-random-random-loadbalancing-within-datacenter">Geographic routing with random random loadbalancing within datacenter</h2>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">US_HOSTS</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="mf">0.</span><span class="nx">us</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span><span class="p">,</span>
+  <span class="mf">1.</span><span class="nx">us</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span><span class="p">,</span>
+  <span class="mf">2.</span><span class="nx">us</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span>
+<span class="p">];</span>
 
-<pre><code>const US_HOSTS = [
-  0.us.example.com,
-  1.us.example.com,
-  2.us.example.com
-];
+<span class="k">const</span> <span class="nx">IN_HOSTS</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="mf">0.</span><span class="k">in</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span><span class="p">,</span>
+  <span class="mf">1.</span><span class="k">in</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span><span class="p">,</span>
+  <span class="mf">2.</span><span class="k">in</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span>
+<span class="p">];</span>
 
-const IN_HOSTS = [
-  0.in.example.com,
-  1.in.example.com,
-  2.in.example.com
-];
+<span class="kd">var</span> <span class="nx">COUNTRIES_MAP</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">IN</span><span class="o">:</span> <span class="nx">IN_HOSTS</span><span class="p">,</span>
+  <span class="nx">PK</span><span class="o">:</span> <span class="nx">IN_HOSTS</span><span class="p">,</span>
+  <span class="nx">BD</span><span class="o">:</span> <span class="nx">IN_HOSTS</span><span class="p">,</span>
+  <span class="nx">SL</span><span class="o">:</span> <span class="nx">IN_HOSTS</span><span class="p">,</span>
+  <span class="nx">NL</span><span class="o">:</span> <span class="nx">IN_HOSTS</span>
+<span class="p">}</span>
+<span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;fetch&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
 
-var COUNTRIES_MAP = {
-  IN: IN_HOSTS,
-  PK: IN_HOSTS,
-  BD: IN_HOSTS,
-  SL: IN_HOSTS,
-  NL: IN_HOSTS
-}
-addEventListener('fetch', event =&gt; {
-  var url = new URL(event.request.url);
-
-  var countryCode = req.headers.get('CF-IPCountry');
-  var hostnames = US_HOSTS;
-  if (COUNTRIES_MAP[countryCode]) {
-    hostnames = COUNTRIES_MAP[countryCode];
-  }
-  // Randomly pick the next host 
-  url.hostname = hostnames[getRandomInt(hostnames.length)];
+  <span class="kd">var</span> <span class="nx">countryCode</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;CF-IPCountry&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">hostnames</span> <span class="o">=</span> <span class="nx">US_HOSTS</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">COUNTRIES_MAP</span><span class="p">[</span><span class="nx">countryCode</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nx">hostnames</span> <span class="o">=</span> <span class="nx">COUNTRIES_MAP</span><span class="p">[</span><span class="nx">countryCode</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="c1">// Randomly pick the next host 
+</span><span class="c1"></span>  <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="nx">hostnames</span><span class="p">[</span><span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">hostnames</span><span class="p">.</span><span class="nx">length</span><span class="p">)];</span>
   
-  event.respondWith(fetch(url, event.request));
-});
+  <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
+<span class="p">});</span>
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-</code></pre>
+<span class="kd">function</span> <span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">max</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
 
     
 <ul id="tags" class="tags">
