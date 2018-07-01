@@ -102,7 +102,7 @@ Cloudflare adds [CF-IPCountry](https://support.cloudflare.com/hc/en-us/articles/
 You can access it using,
 
 ```
-var countryCode = req.headers.get('CF-IPCountry');
+var countryCode = event.request.headers.get('CF-IPCountry');
 ```
 
 You may need to provide a mapping of which countries to use which datacenter. If you are starting out, look at the places with most users for your site, and target only those countries.
@@ -123,7 +123,7 @@ var COUNTRIES_MAP = {
 addEventListener('fetch', event => {
   var url = new URL(event.request.url);
 
-  var countryCode = req.headers.get('CF-IPCountry');
+  var countryCode = event.request.headers.get('CF-IPCountry');
   if (COUNTRIES_MAP[countryCode]) {
     url.hostname = COUNTRIES_MAP[countryCode];
   } else {
@@ -167,7 +167,7 @@ addEventListener('fetch', event => {
   // Randomly pick the next host 
   url.hostname = hostnames[getRandomInt(hostnames.length)];
   
-  event.respondWith(fetch(event.request));
+  event.respondWith(fetch(url, event.request));
 });
 
 function getRandomInt(max) {

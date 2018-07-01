@@ -360,7 +360,7 @@ addEventListener('fetch', event =&gt; {
 
 <p>You can access it using,</p>
 
-<pre><code>var countryCode = req.headers.get('CF-IPCountry');
+<pre><code>var countryCode = event.request.headers.get('CF-IPCountry');
 </code></pre>
 
 <p>You may need to provide a mapping of which countries to use which datacenter. If you are starting out, look at the places with most users for your site, and target only those countries.</p>
@@ -380,7 +380,7 @@ var COUNTRIES_MAP = {
 addEventListener('fetch', event =&gt; {
   var url = new URL(event.request.url);
 
-  var countryCode = req.headers.get('CF-IPCountry');
+  var countryCode = event.request.headers.get('CF-IPCountry');
   if (COUNTRIES_MAP[countryCode]) {
     url.hostname = COUNTRIES_MAP[countryCode];
   } else {
@@ -423,7 +423,7 @@ addEventListener('fetch', event =&gt; {
   // Randomly pick the next host 
   url.hostname = hostnames[getRandomInt(hostnames.length)];
   
-  event.respondWith(fetch(event.request));
+  event.respondWith(fetch(url, event.request));
 });
 
 function getRandomInt(max) {
