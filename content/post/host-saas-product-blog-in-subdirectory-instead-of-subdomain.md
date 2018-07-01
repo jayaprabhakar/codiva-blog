@@ -1,6 +1,6 @@
 ---
-title: "Host Saas Product Blog in Subdirectory Instead of Subdomain"
-pageTitle: "Host Saas Product Blog in Subdirectory Instead of Subdomain | Codiva Online Compiler Blog"
+title: "Host SAAS Product Blog in Subdirectory Instead of Subdomain"
+pageTitle: "Host SAAS Product Blog in Subdirectory Instead of Subdomain | Codiva Online Compiler Blog"
 
 date: 2018-06-13T23:48:26-07:00
 draft: false
