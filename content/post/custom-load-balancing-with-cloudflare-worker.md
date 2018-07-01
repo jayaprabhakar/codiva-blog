@@ -21,7 +21,7 @@ This post assumes you know
 
 Intercept a request, and send the request to a different host.
 
-```
+```javascript
 addEventListener('fetch', event => {
   var url = new URL(event.request.url);
 
@@ -40,7 +40,7 @@ When you have a list of origin servers, pick a random host to route to.
 
 This is a very basic load balancing technique to evenly distribute the traffic across all origin servers.
 
-```
+```javascript
 var hostnames = [
   0.example.com,
   1.example.com,
@@ -65,7 +65,7 @@ function getRandomInt(max) {
 
 What to do when the host is down? A simple fallback strategy to route the request to a different host. Use this only if you know the request are idempotent. Mostly GET requests should be okay.
 
-```
+```javascript
 
 addEventListener('fetch', event => {
   var url = new URL(event.request.url);
@@ -101,7 +101,7 @@ Cloudflare adds [CF-IPCountry](https://support.cloudflare.com/hc/en-us/articles/
 
 You can access it using,
 
-```
+```javascript
 var countryCode = event.request.headers.get('CF-IPCountry');
 ```
 
@@ -109,7 +109,7 @@ You may need to provide a mapping of which countries to use which datacenter. If
 
 In my case, India and the US contributes 80% of the traffic. So, for India and its neighbors, use India datacenter. For all others, use the US datacenters.
 
-```
+```javascript
 const US_HOST = "us.example.com"
 const IN_HOST = "in.example.com"
 
@@ -136,7 +136,7 @@ addEventListener('fetch', event => {
 
 ## Geographic routing with random random loadbalancing within datacenter
 
-```
+```javascript
 const US_HOSTS = [
   0.us.example.com,
   1.us.example.com,

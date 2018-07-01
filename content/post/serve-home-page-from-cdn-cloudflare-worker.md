@@ -56,7 +56,7 @@ This trick lies in identifying whether the user is a first time user or existing
 Otherwise, send the request to the server. (Optimizing this case is in later post).
 
 
-```
+```javascript
   if (event.request.headers.has('Cookie')
         && event.request.headers.get('Cookie').indexOf('connect.sid')>=0) {
       // Existing user.  

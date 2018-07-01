@@ -28,7 +28,7 @@ This is the easiest option if you are getting started.
 1. Create a new project, by giving a name "my first project", and click 'Create' button
 1. Define your new Java file, by giving a name, say 'HelloWorld' on the new file form.
 1. Codiva will autocreate a basic file, to get started.
-	```
+	```java
 	class HelloWorld {
 	  public static void main(String[] args) {    
 	    System.out.println("Hello Codiva");
@@ -65,12 +65,12 @@ This is the basic approach.
 1. Use any text editor to create a file, say `HelloWorld.java`
 1. On the terminal, go to that directory, and run
 
-    ```
+    ```bash
     javac HelloWorld.java
     ```
 1. If there are no compilation errors, this will create a file `HelloWorld.class` (or whatever class that was in the file)
 1. Then run, 
-    ```
+    ```bash
     java HelloWorld
     ```
 

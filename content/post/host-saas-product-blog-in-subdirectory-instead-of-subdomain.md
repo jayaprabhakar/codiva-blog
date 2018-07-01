@@ -17,9 +17,9 @@ It is simple and fast with negligible overhead. A DNS lookup for the first reque
 
 However, hosting as a subdirectory is a bit slow. You will have to configure on your webserver. If you use NGINX, it will be something like,
 
-```
+```nginx
 location /blog {
-  proxy_pass etc..
+  proxy_pass etc ...
 }
 ```
 
@@ -37,7 +37,7 @@ Codiva.io Blog is hosted in Github Pages with https. The github url looks someth
 
 In cloudflare worker, intercept the request. If the url path starts with /blog/, fetch the request from github instead.
 
-```
+```javascript
 addEventListener('fetch', event => {
   var url = new URL(event.request.url);
   if (url.pathname.startsWith('/blog/') || url.pathname === '/blog') {

@@ -7,3 +7,5 @@ publishDir = "docs"
 
 paginate = 10
 
+pygmentsCodeFences = true
+pygmentsUseClasses = true
