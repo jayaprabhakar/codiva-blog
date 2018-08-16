@@ -302,9 +302,13 @@
   <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
   <script async custom-element="amp-iframe"
       src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script>
+      
+<script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
 
 </head>
 <body>
+
+<amp-analytics config="https://www.googletagmanager.com/amp.json?id=GTM-T35PZJ8&gtm.url=SOURCE_URL" data-credentials="include"></amp-analytics>
 
   <header class="header">
     <span class="logo">
@@ -348,8 +352,7 @@
 </span><span class="c1"></span>  <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="s1">&#39;myorigin.&#39;</span> <span class="o">+</span> <span class="nx">url</span><span class="p">.</span><span class="nx">hostname</span>
   
   <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
-<span class="p">});</span>
-</code></pre></div>
+<span class="p">});</span></code></pre></div>
 <p>This doesn&rsquo;t do anything useful yet, but this is the basic pattern that will be used in the rest of the examples.</p>
 
 <h2 id="load-balancer-with-random-routing">Load balancer with random routing</h2>
@@ -374,8 +377,7 @@
 
 <span class="kd">function</span> <span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">max</span><span class="p">));</span>
-<span class="p">}</span>
-</code></pre></div>
+<span class="p">}</span></code></pre></div>
 <h2 id="load-balancer-with-fallback">Load balancer with fallback</h2>
 
 <p>What to do when the host is down? A simple fallback strategy to route the request to a different host. Use this only if you know the request are idempotent. Mostly GET requests should be okay.</p>
@@ -400,8 +402,7 @@
         <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeoutId</span><span class="p">);</span>
         <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
     <span class="p">});</span>
-<span class="p">});</span>
-</code></pre></div>
+<span class="p">});</span></code></pre></div>
 <h2 id="sticky-routing">Sticky routing</h2>
 
 <p>You may want to route the subsequent requests from the same user to the same host. This can reduce the latency, if the backend caches the data effectively.</p>
@@ -411,8 +412,7 @@
 <p>Cloudflare adds <a href="https://support.cloudflare.com/hc/en-us/articles/200168236-What-does-Cloudflare-IP-Geolocation-do-">CF-IPCountry</a> header to all requests once Cloudflare IP Geolocation is enabled.</p>
 
 <p>You can access it using,</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">countryCode</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;CF-IPCountry&#39;</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">countryCode</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;CF-IPCountry&#39;</span><span class="p">);</span></code></pre></div>
 <p>You may need to provide a mapping of which countries to use which datacenter. If you are starting out, look at the places with most users for your site, and target only those countries.</p>
 
 <p>In my case, India and the US contributes 80% of the traffic. So, for India and its neighbors, use India datacenter. For all others, use the US datacenters.</p>
@@ -437,8 +437,7 @@
   <span class="p">}</span>
   
   <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">));</span>
-<span class="p">});</span>
-</code></pre></div>
+<span class="p">});</span></code></pre></div>
 <h2 id="geographic-routing-with-random-random-loadbalancing-within-datacenter">Geographic routing with random random loadbalancing within datacenter</h2>
 <div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">US_HOSTS</span> <span class="o">=</span> <span class="p">[</span>
   <span class="mf">0.</span><span class="nx">us</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">com</span><span class="p">,</span>
@@ -475,8 +474,7 @@
 
 <span class="kd">function</span> <span class="nx">getRandomInt</span><span class="p">(</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">max</span><span class="p">));</span>
-<span class="p">}</span>
-</code></pre></div>
+<span class="p">}</span></code></pre></div>
 
     
 <ul id="tags" class="tags">
