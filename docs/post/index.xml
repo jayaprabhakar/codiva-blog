@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Codiva.io Online Compiler and IDE | Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 25 Jun 2018 00:27:45 +0530</lastBuildDate>
+    <lastBuildDate>Fri, 07 Sep 2018 00:47:02 -0700</lastBuildDate>
     
 	<atom:link href="https://www.codiva.io/blog/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Update Response Headers on Cloudflare Workers</title>
+      <link>https://www.codiva.io/blog/post/update-response-headers-on-cloudflare-workers/</link>
+      <pubDate>Fri, 07 Sep 2018 00:47:02 -0700</pubDate>
+      
+      <guid>https://www.codiva.io/blog/post/update-response-headers-on-cloudflare-workers/</guid>
+      <description>&lt;p&gt;Do you have a static website and you want to change response headers, but the hosting provider does not provide a way to do that? Cloudflare workers makes it easy to do that.
+&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Custom Load Balancing With Cloudflare Worker</title>

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html ⚡>
 <head>
-  <title>Serviceworker</title>
+  <title>Update Response Headers on Cloudflare Workers</title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 
@@ -23,7 +23,7 @@
   <meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png">
   <meta name="theme-color" content="#243342">
 
-  <link rel="canonical" href="https://www.codiva.io/blog/tags/serviceworker/">
+  <link rel="canonical" href="https://www.codiva.io/blog/post/update-response-headers-on-cloudflare-workers/">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <style amp-custom>
      
@@ -328,134 +328,44 @@
   <div class="mainContainer">
     
   <div class="main">
+    <h2>Update Response Headers on Cloudflare Workers</h2>
+    <p>Do you have a static website and you want to change response headers, but the hosting provider does not provide a way to do that? Cloudflare workers makes it easy to do that.
+</p>
 
+<p>For example, if you want to disable the page from being included as a frame in another page, you can set content-security-policy.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;fetch&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="p">=&gt;</span> <span class="p">{</span>
+
+  <span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+            <span class="nx">response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+            <span class="c1">// Set content-security-policy header to self and also include 
+</span><span class="c1"></span>            <span class="c1">// cloudflare workers dashboard to make it easy to preview
+</span><span class="c1"></span>            <span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&#34;content-security-policy&#34;</span><span class="p">,</span>
+               <span class="s2">&#34;frame-ancestors &#39;self&#39; https://dash.cloudflare.com;&#34;</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="nx">response</span><span class="p">;</span>
+        <span class="p">}</span>
+
+      <span class="p">));</span>
     
 
-         
-        <h2><a href="https://www.codiva.io/blog/post/update-response-headers-on-cloudflare-workers/">Update Response Headers on Cloudflare Workers</a></h2>
-   
-        <p>Do you have a static website and you want to change response headers, but the hosting provider does not provide a way to do that? Cloudflare workers makes it easy to do that.
-</p>
-        <a href="https://www.codiva.io/blog/post/update-response-headers-on-cloudflare-workers/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-	Tags: 
-	
-  
-  
-    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
-  
-    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
-  
-</ul>
-
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/custom-load-balancing-with-cloudflare-worker/">Custom Load Balancing With Cloudflare Worker</a></h2>
-   
-        <p>Launched your website? Getting lot of traffic? And you are planning to add more servers? You will need load balanacers for scalability and reliability of your website.</p>
-
-<p>In this post, we will learn about load balancers and how to set them up at a low cost with Cloudflare Service Workers.
-</p>
-        <a href="https://www.codiva.io/blog/post/custom-load-balancing-with-cloudflare-worker/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-	Tags: 
-	
-  
-  
-    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
-  
-    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
-  
-    <li><a href="/blog/tags/web">web</a> </li>
-  
-    <li><a href="/blog/tags/latency">latency</a> </li>
-  
-    <li><a href="/blog/tags/scaling">scaling</a> </li>
-  
-</ul>
-
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/">Host Product Blog in Subdirectory Instead of Subdomain</a></h2>
-   
-        <p>You have a SAAS product. Now you want to add articles, blogs, tutorials, etc to support your product or for content marketing and SEO. Should you have these hosted as a subdomain (<a href="https://blog.example.com">https://blog.example.com</a>) or as a subdirectory (<a href="https://example.com/blog)?">https://example.com/blog)?</a>
-</p>
-        <a href="https://www.codiva.io/blog/post/host-saas-product-blog-in-subdirectory-instead-of-subdomain/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-	Tags: 
-	
-  
-  
-    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
-  
-    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
-  
-    <li><a href="/blog/tags/latency">latency</a> </li>
-  
-    <li><a href="/blog/tags/web">web</a> </li>
-  
-    <li><a href="/blog/tags/hosting">hosting</a> </li>
-  
-</ul>
-
-
-        <hr>
-
-         
-        <h2><a href="https://www.codiva.io/blog/post/serve-home-page-from-cdn-cloudflare-worker/">Serve Home Page From CDN with Cloudflare Worker</a></h2>
-   
-        <p>Cloudflare Service Worker helped Codiva jump at least 2 positions in Google by speading up home page response. I did it by serving the new users (and search crawler) from the edge, and avoiding redirects for logged in users.</p>
-
-<p>Let us take a look at the undocumented hack using Cloudflare workers.
-</p>
-        <a href="https://www.codiva.io/blog/post/serve-home-page-from-cdn-cloudflare-worker/">Read More...</a>
-
-        
-<ul id="tags" class="tags">
-  
-  	
-	Tags: 
-	
-  
-  
-    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
-  
-    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
-  
-    <li><a href="/blog/tags/latency">latency</a> </li>
-  
-    <li><a href="/blog/tags/web">web</a> </li>
-  
-    <li><a href="/blog/tags/hosting">hosting</a> </li>
-  
-</ul>
-
-
-        <hr>
+<span class="p">});</span></code></pre></div>
 
     
-
-    
-
+<ul id="tags" class="tags">
+  
+  	
+	Tags: 
+	
+  
+  
+    <li><a href="/blog/tags/cloudflare">Cloudflare</a> </li>
+  
+    <li><a href="/blog/tags/serviceworker">ServiceWorker</a> </li>
+  
+</ul>
 
   </div>
-
 
     
   </div>
